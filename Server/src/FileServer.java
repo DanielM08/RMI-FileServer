@@ -8,11 +8,11 @@ public class FileServer {
             Registry registry = LocateRegistry
                     .createRegistry(1099);
 
-            ExecuteShellCommand obj = new ExecuteShellCommand();
+            Command obj = new Command("/ServerDir");
             Naming.rebind("Command", obj);
 
             System.out.println( registry.list()[0]);
-            System.out.println("Ligado no registro");
+            System.out.println("Connected in register");
 
             System.out.println("File Server is ready.");
         }catch (Exception e) {

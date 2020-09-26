@@ -8,13 +8,14 @@ import java.util.Scanner;
 public class ClientFileServer {
     public static void main (String[] args) {
         Scanner sc = new Scanner(System.in);
-        IExecuteShellCommand obj;
+        ICommand obj;
         try {
             System.out.println("Conecting to server...");
             Registry registry = LocateRegistry
                     .getRegistry("localhost",1099);
 
-            obj = (IExecuteShellCommand) registry.lookup("Command");
+            //obj = (IExecuteShellCommand) registry.lookup("Command");
+            obj = (ICommand) registry.lookup("Command");
             // Main Loop
             String[] input = {""};
             String cmd = "";
@@ -24,19 +25,40 @@ public class ClientFileServer {
                 System.out.print(">>> ");
                 input = sc.nextLine().split(" ");
                 cmd = input[0];
-                if (cmd.equals("ls"))
+                if (cmd.equals("mkdir"))
                 {
-                    //String result = obj.executeCommand("ls");
-                    String []files = obj.listFiles();
-                    for (String file : files ) {
-                        System.out.println(file);
+                    try {
+                        obj.createDirectory(input[1]);
                     }
-                    //System.out.println(result);
+                    catch (Exception e){
+                        System.out.println("[Error on arguments]");
+                    }
+                }
+                else if (cmd.equals("touch")){
+                    try {
+                        obj.createFile(input[1]);
+                    }
+                    catch (Exception e){
+                        System.out.println("[Error on arguments]");
+                    }
+                }
+                else if (cmd.equals("ls"))
+                {
+                    try {
+                        String []files;
+                        files = obj.listFiles(input[1]);
+                        for (String file : files ) {
+                            System.out.println(file);
+                        }
+                    }
+                    catch (Exception e) {
+                        System.out.println("[Error on arguments]");
+                    }
                 }
                 else if (cmd.equals("rm"))
                 {
                     try {
-                        obj.remove(input[1]);
+                        obj.removeDirectoryOrFile(input[1]);
                     }
                     catch (Exception e){
                         System.out.println("[Error on arguments]");
@@ -68,6 +90,15 @@ public class ClientFileServer {
                     String workingDir = obj.printWorkingDirectory();
                     System.out.println(workingDir);
                 }
+                else if (cmd.equals("cd"))
+                {
+                    try {
+                        obj.changeDirectory(input[1]);
+                    }
+                    catch (Exception e) {
+                        System.out.println("[Error on arguments]");
+                    }
+                }
                 else
                 {
                     System.out.println("[Invalid Command]");
@@ -75,7 +106,8 @@ public class ClientFileServer {
             }
 
         }catch (Exception e) {
-            System.out.println("ClientFileClient exception: " + e);
+            System.out.println("ClientFileClient exception: ");
+            e.printStackTrace();
         }
     }
 }
