@@ -9,23 +9,58 @@ public class ExecuteShellCommand extends UnicastRemoteObject implements IExecute
 
     public String executeCommand(String command) {
 
-        StringBuffer output = new StringBuffer();
-        Process p;
-        try {
-            p = Runtime.getRuntime().exec(command);
-            p.waitFor();
-            BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(p.getInputStream()));
+        if (command.trim().equals("ls")) {
+            StringBuffer output = new StringBuffer();
+            Process p;
+            try {
+                p = Runtime.getRuntime().exec(command);
+                p.waitFor();
+                BufferedReader reader =
+                        new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-            String line = "";
-            while ((line = reader.readLine())!= null) {
-                output.append(line + "\n");
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    output.append(line + "\n");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            return output.toString();
         }
+        else {
+            return "Invalid Command\n";
+        }
+    }
 
-        return output.toString();
+    @Override
+    public String[] listFiles(String serverPath) throws RemoteException {
+        return new String[0];
+    }
+
+    @Override
+    public String[] listFiles() throws RemoteException {
+        return new String[0];
+    }
+
+    @Override
+    public boolean remove(String serverPath) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public boolean createDirectory(String serverPath) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public boolean createFile(String serverPath) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public String printWorkingDirectory() throws RemoteException {
+        return null;
     }
 }
