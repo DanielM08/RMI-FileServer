@@ -10,5 +10,4 @@ public interface ICommand extends Remote{
     public boolean moveFile(String filePath, String fileDestiny) throws RemoteException;
     public boolean removeDirectoryOrFile(String fileOrDirName) throws RemoteException;
     public String printWorkingDirectory() throws RemoteException;
-    public boolean changeDirectory(String s) throws RemoteException;
 }

@@ -74,6 +74,16 @@ public class ClientFileServer {
                         System.out.println("[Error on arguments]");
                     }
                 }
+                else if (cmd.equals("cat"))
+                {
+                    try {
+                        String result = obj.showFileContent(input[1]);
+                        System.out.println(result);
+                    }
+                    catch (Exception e){
+                        System.out.println("[Error on arguments]");
+                    }
+                }
                 else if (cmd.equals("touch"))
                 {
                     try {
@@ -90,10 +100,13 @@ public class ClientFileServer {
                     String workingDir = obj.printWorkingDirectory();
                     System.out.println(workingDir);
                 }
-                else if (cmd.equals("cd"))
+                else if (cmd.equals("mv"))
                 {
                     try {
-                        obj.changeDirectory(input[1]);
+                        boolean success = obj.moveFile(input[1], input[2]);
+                        if (!success){
+                            System.out.println("[Failed to move]");
+                        }
                     }
                     catch (Exception e) {
                         System.out.println("[Error on arguments]");

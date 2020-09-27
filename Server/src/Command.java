@@ -1,5 +1,4 @@
 import java.io.*;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -70,19 +69,4 @@ public class Command extends UnicastRemoteObject implements ICommand {
         return System.getProperty("user.dir");
     }
 
-    @Override
-    public boolean changeDirectory(String path) throws RemoteException {
-        String currentDirectory = System.getProperty("user.dir");
-        if (!path.startsWith("/"))
-            path = currentDirectory + "/" + path;
-        File file = new File(path);
-        if (!file.isDirectory()) {
-            System.out.println("Caminho inválido");
-            return false;
-        }
-        System.out.println(path);
-        System.out.println("Mudou o caminho");
-        System.setProperty("user.dir", path);
-        return true;
-    }
 }
